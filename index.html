@@ -1034,17 +1034,27 @@
         }
 
         function copyDossier() {
-            const v = id => document.getElementById(id).value;
+            const v = id => document.getElementById(id)?.value || '';
             if (!v('dossierNummer')) return showToast('Niets om te kopiëren');
-            const txt = [
-                `DOSSIER: ${v('dossierNummer').toUpperCase()}`,
-                `DATUM:   ${v('timestamp')}`,
-                `KLANT:   ${v('naamAbo').toUpperCase()}`,
-                `MODEL:   ${v('typePorsche').toUpperCase()} [${v('kenteken').toUpperCase()}]`,
-                `PROBLEEM:\n${v('probleem')}`,
-                `OPLOSSING:\n${v('oplossing')}`
-            ].join('\n');
-            navigator.clipboard.writeText(txt).then(() => showToast('✓ Gekopieerd naar klembord'));
+            const lines = [];
+            const add = (label, val, upper=false) => {
+                if (val && val.trim()) lines.push(`${label}${upper ? val.toUpperCase() : val}`);
+            };
+            add('DOSSIER:        ', v('dossierNummer'), true);
+            add('DATUM:          ', v('timestamp'));
+            add('KLANT:          ', v('naamAbo'), true);
+            add('TELEFOON:       ', v('telAbo'), true);
+            add('ADRES:          ', v('adresAbo'), true);
+            add('MODEL:          ', v('typePorsche'), true);
+            add('KENTEKEN:       ', v('kenteken'), true);
+            add('VIN:            ', v('vin'), true);
+            add('KM STAND:       ', v('kmStand'), true);
+            add('LOCATIE:        ', v('locatie'), true);
+            add('VESTIGING:      ', v('porscheCentrum'));
+            add('CONTACT PC:     ', v('contactPc'), true);
+            if (v('probleem').trim()) lines.push(`PROBLEEM:\n${v('probleem').trim()}`);
+            if (v('oplossing').trim()) lines.push(`OPLOSSING:\n${v('oplossing').trim()}`);
+            navigator.clipboard.writeText(lines.join('\n')).then(() => showToast('✓ Gekopieerd naar klembord'));
         }
 
         function exportCSV() {
