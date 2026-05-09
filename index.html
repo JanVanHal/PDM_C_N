@@ -973,7 +973,7 @@
             document.getElementById('dossierForm').reset();
             document.getElementById('entryId').value = '';
             const d = new Date();
-            const ts = `${d.toLocaleDateString('nl-NL')} ${d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`;
+            const ts = `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
             document.getElementById('timestamp').value = ts;
             document.getElementById('topbarCrumb').textContent = 'Nieuw dossier';
             document.getElementById('dossierNummer').focus();
@@ -1092,7 +1092,7 @@
             if (saved) isDarkMode = saved === 'dark';
             applyTheme();
             const d = new Date();
-            const ts = `${d.toLocaleDateString('nl-NL')} ${d.toLocaleTimeString('nl-NL',{hour:'2-digit',minute:'2-digit'})}`;
+            const ts = `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
             document.getElementById('timestamp').value = ts;
             setupUppercase();
             renderHistory();
