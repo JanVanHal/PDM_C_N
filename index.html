@@ -72,6 +72,36 @@
             --modal-overlay: rgba(0,0,0,0.6);
         }
 
+        /* Medium — warm slate, softer than dark */
+        .medium {
+            --canvas:        #2c2c2a;
+            --surface:       #343431;
+            --border:        #424240;
+            --border-strong: #545450;
+
+            --ink:           #d8d5ce;
+            --ink-light:     #a09d97;
+            --ink-muted:     #706e68;
+            --ink-faint:     #4a4845;
+
+            --accent:        #8578f0;
+            --accent-light:  #2e2a52;
+
+            --red:           #e05555;
+            --red-light:     #2e1c1c;
+            --orange:        #e87230;
+            --orange-light:  #2e2018;
+            --green:         #3ab858;
+            --green-light:   #1a2e20;
+            --blue-light:    #1e2c38;
+            --blue:          #6a9fc0;
+
+            --shadow-sm:     0 1px 3px rgba(0,0,0,0.2);
+            --shadow-md:     0 4px 16px rgba(0,0,0,0.28);
+            --shadow-lg:     0 8px 32px rgba(0,0,0,0.36);
+            --modal-overlay: rgba(0,0,0,0.5);
+        }
+
         html, body { height: 100%; }
 
         body {
@@ -530,8 +560,9 @@
             <button class="icon-btn" onclick="document.getElementById('importFile').click()" title="Importeer CSV">
                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
             </button>
-            <button class="icon-btn" onclick="toggleTheme()" title="Thema wisselen">
+            <button class="icon-btn" onclick="toggleTheme()" title="Thema wisselen" id="themeBtn" style="width:auto;padding:0 8px;gap:5px;font-size:11px;font-weight:500;">
                 <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                <span id="themeBtnLabel">Licht</span>
             </button>
         </div>
     </div>
@@ -811,19 +842,30 @@
         const STORAGE_KEY = 'p_dossiers';
         let dossiers = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
         let activeId = null;
-        let isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
         const csvFields  = ['entryId','dossierNummer','timestamp','naamAbo','telAbo','adresAbo','typePorsche','kenteken','vin','locatie','porscheCentrum','contactPc','probleem','oplossing','kmStand'];
         const formFields = ['dossierNummer','timestamp','naamAbo','telAbo','adresAbo','typePorsche','kenteken','vin','locatie','porscheCentrum','contactPc','probleem','oplossing','kmStand'];
         const ucFields   = ['dossierNummer','naamAbo','telAbo','adresAbo','kenteken','vin','locatie','contactPc','kmStand','searchInput'];
 
+        // theme: 'light' | 'medium' | 'dark'
+        let theme = 'light';
+
+        const themeLabels = { light: 'Licht', medium: 'Middel', dark: 'Donker' };
+
         function applyTheme() {
-            document.documentElement.classList.toggle('dark', isDarkMode);
+            document.documentElement.classList.remove('dark', 'medium');
+            if (theme === 'dark')   document.documentElement.classList.add('dark');
+            if (theme === 'medium') document.documentElement.classList.add('medium');
+            const lbl = document.getElementById('themeBtnLabel');
+            if (lbl) lbl.textContent = themeLabels[theme];
         }
+
         function toggleTheme() {
-            isDarkMode = !isDarkMode;
+            if (theme === 'light')       theme = 'medium';
+            else if (theme === 'medium') theme = 'dark';
+            else                         theme = 'light';
             applyTheme();
-            localStorage.setItem('p_theme', isDarkMode ? 'dark' : 'light');
+            localStorage.setItem('p_theme', theme);
         }
 
         function onNummerInput() {
@@ -1089,7 +1131,7 @@
 
         window.onload = () => {
             const saved = localStorage.getItem('p_theme');
-            if (saved) isDarkMode = saved === 'dark';
+            if (saved === 'dark' || saved === 'medium' || saved === 'light') theme = saved;
             applyTheme();
             const d = new Date();
             const ts = `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
