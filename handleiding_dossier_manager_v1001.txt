@@ -1,0 +1,24 @@
+=============================
+
+Als je de pagina hebt geinstalleerd als app, en je klikt na het invullen van een (incorrect/incompleet) adres op de icons voor mpas of google zal er automatisch een nieuw tabblad in je browser geopend worden met de informatie.
+
+Onderaan vind je de historie van de dossiers die je hebt gemaakt, dit wordt enkel lockaal opgeslagen in je browser, verwijder je dus de browser of de cache dan is je data weg.
+
+----
+
+Header balk Icons
+
+Exporteers CS, Importeer CSV ; je kan data importeren/exporteren voor backup.
+
+Dagoverzicht; Deze knop maakt automatisch een text bestand met de dossiers die tot nog toe op deze dag gemaakt zijn.
+
+Thema; wisselen tussen light/dark mode
+
+Knoppen in dossier
+
++Nieuw; opnet ene nieuw dossier en zal vragen het bestaande dosier op te slaan of niet.
+Kopieer; kopieert alle ingevulde gegevens naar klembord, handig om bijvoorbeeld door te geven aan collega bij overdracht van dossier.
+Wis; zal het huiige dossier wissen (let op is geen weg terug)
+Opslaan; is huidig dossier (tussendoor) opslaan
+
+=============================
