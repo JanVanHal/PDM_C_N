@@ -1070,8 +1070,9 @@
         }
 
         function exportDayTxt() {
-            const today = new Date().toLocaleDateString('nl-NL');
-            const entries = dossiers.filter(d => d.timestamp && d.timestamp.includes(today));
+            const now = new Date();
+            const today = `${String(now.getDate()).padStart(2,'0')}-${String(now.getMonth()+1).padStart(2,'0')}-${now.getFullYear()}`;
+            const entries = dossiers.filter(d => d.timestamp && d.timestamp.startsWith(today));
             if (!entries.length) return showToast('Geen dossiers vandaag');
             let txt = `PORSCHE DAGOVERZICHT ${today}\n${'='.repeat(48)}\n\n`;
             entries.forEach(d => {
