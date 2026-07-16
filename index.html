@@ -846,6 +846,15 @@
         const csvFields  = ['entryId','dossierNummer','timestamp','naamAbo','telAbo','adresAbo','typePorsche','kenteken','vin','locatie','porscheCentrum','contactPc','probleem','oplossing','kmStand'];
         const formFields = ['dossierNummer','timestamp','naamAbo','telAbo','adresAbo','typePorsche','kenteken','vin','locatie','porscheCentrum','contactPc','probleem','oplossing','kmStand'];
         const ucFields   = ['dossierNummer','naamAbo','telAbo','adresAbo','kenteken','vin','locatie','contactPc','kmStand','searchInput'];
+        let savedSnapshot = '';
+
+        function formSnapshot() {
+            return JSON.stringify(formFields.map(f => document.getElementById(f)?.value || ''));
+        }
+
+        function isDirty() {
+            return formSnapshot() !== savedSnapshot;
+        }
 
         // theme: 'light' | 'medium' | 'dark'
         let theme = 'light';
@@ -963,6 +972,7 @@
                 const num = d.dossierNummer || 'Dossier';
                 document.getElementById('topbarCrumb').textContent = num;
             }
+            savedSnapshot = formSnapshot();
             renderHistory();
         }
 
@@ -990,16 +1000,13 @@
             activeId = id;
             document.getElementById('entryId').value = id;
             localStorage.setItem(STORAGE_KEY, JSON.stringify(dossiers));
+            savedSnapshot = formSnapshot();
             renderHistory();
             showToast('✓ Dossier opgeslagen');
         }
 
         function confirmNew() {
-            const hasContent = formFields.some(f => {
-                const val = document.getElementById(f).value;
-                return val && f !== 'timestamp';
-            });
-            if (hasContent) {
+            if (isDirty()) {
                 showConfirm('Nieuw Dossier','Huidige dossier opslaan voordat u verdergaat?',()=>{
                     handleSave(true);
                     setTimeout(createNew, 100);
@@ -1019,6 +1026,7 @@
             document.getElementById('timestamp').value = ts;
             document.getElementById('topbarCrumb').textContent = 'Nieuw dossier';
             document.getElementById('dossierNummer').focus();
+            savedSnapshot = formSnapshot();
             renderHistory();
             showToast('Nieuw dossier');
         }
@@ -1148,6 +1156,7 @@
             const ts = `${String(d.getDate()).padStart(2,'0')}-${String(d.getMonth()+1).padStart(2,'0')}-${d.getFullYear()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
             document.getElementById('timestamp').value = ts;
             setupUppercase();
+            savedSnapshot = formSnapshot();
             renderHistory();
         };
     </script>
